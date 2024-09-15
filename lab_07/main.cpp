@@ -1,62 +1,62 @@
+#include "search.hpp"
+#include "tests.hpp"
 #include <iostream>
 #include <vector>
 #include <algorithm>
 #include <ctime>
-#include <array>
-#include <functional>
-#include <string_view>
+#include <gtest/gtest.h>
 
-enum {
+enum alg_commands {
     DUMMY_SEARCH,
     BIN_SEARCH,
     BOTH_ALGS
-} alg_commands;
+};
 
-enum {
+enum menu_commands {
     EXIT,
     SELF_CONTROLED_MODE,
     MESUREMENTS,
+    TESTS,
     N_COMMANDS
-} menu_commands;
+};
+
+#define LIGHT_GREEN_C   "\033[1;32m"
+#define RED_C           "\033[0;31m"
+#define GREEN_C         "\033[0;32m"
+#define NC              "\033[0m"
 
 #define MENU "Program menu:\n" \
              "0. Exit\n" \
              "1. Self controled mode\n" \
-             "2. Get mesurements\n"
+             "2. Get mesurements\n" \
+             "3. Test all\n" 
 
 #define ALG_MENU_PROMPT "Algorithms menu:\n" \
                         "0. Exhaustive search\n" \
                         "1. Binary search\n" \
                         "2. Both algorithms\n"
 
-#define COMMAND_PROMPT          ">>> Enter command to execute: "
-#define INPUT_ARRAY_N_PROMPT    ">>> Enter number of elements in the array: "
-#define INPUT_ARRAY_N_ERROR     "[!] Error. N must be bigger than 0. Try again\n"
-#define CHOOSE_X_PROMPT         ">>> Enter element to search for: "
-#define GENERATED_ARRAY_MSG     "[+] Array was generated successfully: \n"
+#define COMMAND_PROMPT          LIGHT_GREEN_C ">>> Enter command to execute: " NC
+#define INPUT_ARRAY_N_PROMPT    LIGHT_GREEN_C ">>> Enter number of elements in the array: " NC
+#define INPUT_ARRAY_N_ERROR     RED_C "[!] Error. N must be bigger than 0. Try again\n" NC
+#define CHOOSE_X_PROMPT         LIGHT_GREEN_C ">>> Enter element to search for: " NC
+#define ARRAY_OUTPUT_MSG        GREEN_C "[+] Array you are working with: \n" NC
 #define UNKNOWN_COMMAND_MSG     "[!] Unknown command, try again.\n"
-#define NUMBER_OF_COMPARES_MSG  "[+] Number of compares done: \n"
+#define NUMBER_OF_COMPARES_MSG  "[+] Number of compares done: " 
+#define TEST_COMPLETE_MSG       GREEN_C "[+] Tests completed succesfully" NC
 
-#define X_REMINDER_MSG          "[+] You were searching for X = "
+#define X_REMINDER_MSG          "[+] You were searching for X = " 
 #define X_FOUND_MSG             "[+] It was found at the position with the index "
 #define X_NOT_FOUND_MSG         "[-] It was not found in the given array.\n"
-
-template<typename T> int dummySearch(const std::vector<T> &a, const T &x) noexcept;
-template<typename T> int binSearch(const std::vector<T> &a, const T &x) noexcept;
 
 void self_controled_mode();
 
 // TODO:
-// - Count number of compares
-// - Write tests
-// - Change code to find the correct index
-// - Remind user the array
-// - Add colors
+// - Timings
 
 int main() {
     int command = 1;
     while (command) {
-        // TODO: Fix dumb input check
         std::cout << MENU << COMMAND_PROMPT;
         std::cin >> command;
 
@@ -68,6 +68,13 @@ int main() {
                 break;
             case MESUREMENTS:
                 break;
+            case TESTS: {
+                setlocale(LC_ALL, "Russian");
+                testing::InitGoogleTest();
+                int res = RUN_ALL_TESTS();
+                if (res)
+                    std::cout << TEST_COMPLETE_MSG;
+            } break;
             default:
                 std::cout << UNKNOWN_COMMAND_MSG;
                 break;
@@ -116,6 +123,12 @@ void PrintResults(int x, int res_i, int cmps = 0) {
     std::cout << NUMBER_OF_COMPARES_MSG << cmps << std::endl;
 }
 
+void GeneratePairsVector(std::vector<std::pair<int,int>> &res, std::vector<int> a) {
+    for (typename std::vector<int>::size_type i = 0; i < a.size(); ++i) {
+        res.emplace_back(a[i], i);
+    }
+}
+
 void self_controled_mode() {
     int n = 0, x = 0;
     ScanWithPrompt(n, INPUT_ARRAY_N_PROMPT, INPUT_ARRAY_N_ERROR, {[](int &val){ return val > 0; }});
@@ -124,7 +137,7 @@ void self_controled_mode() {
     std::vector<int> a(n);
     std::generate(a.begin(), a.end(), my_rand);
 
-    std::cout << GENERATED_ARRAY_MSG;
+    std::cout << ARRAY_OUTPUT_MSG;
     PrintArray(a);
 
     std::cout << CHOOSE_X_PROMPT;
@@ -135,41 +148,21 @@ void self_controled_mode() {
         return alg == DUMMY_SEARCH || alg == BIN_SEARCH || alg == BOTH_ALGS;
     }});
 
+    std::cout << ARRAY_OUTPUT_MSG;
+    PrintArray(a);
+
+    std::vector<std::pair<int,int>> analysis_data;
     if (alg == DUMMY_SEARCH || alg == BOTH_ALGS) {
-        int res_i = dummySearch(a, x);
-        PrintResults(x, res_i);
+        int res_i = dummySearchForAnalysis(a, x, analysis_data);
+        PrintResults(x, res_i, analysis_data[res_i].second);
     }
 
     if (alg == BIN_SEARCH || alg == BOTH_ALGS) {
-        std::sort(a.begin(), a.end());
-        int res_i = binSearch(a, x);
-        PrintResults(x, res_i);
+        std::vector<std::pair<int,int>> prepared_a;
+        GeneratePairsVector(prepared_a, a);
+
+        std::sort(prepared_a.begin(), prepared_a.end(), [](std::pair<int,int> &a, std::pair<int,int> &b){return a.first < b.first;});
+        int res_i = binSearchForAnalysis(prepared_a, x, analysis_data);
+        PrintResults(x, prepared_a[res_i].second, analysis_data[analysis_data.size() - 1].second);
     }
-}
-
-template<typename T>
-int dummySearch(const std::vector<T> &a, const T &x) noexcept {
-    for (int i = 0; i < a.size(); ++i) {
-        if (a[i] == x)
-            return i;
-    }
-
-    return -1;
-}
-
-template<typename T>
-int binSearch(const std::vector<T> &a, const T &x) noexcept {
-    int l = 0;
-    int r = a.size() - 1;
-    int m = a.size() / 2;
-    while (a[m] != x && l <= r) {
-        if (x > a[m])
-            l = m + 1;
-        else
-            r = m - 1;
-
-        m = (r + l) / 2;
-    }
-
-    return l > r ? -1 : m;
 }
