@@ -1,0 +1,48 @@
+\chapter{Технологический раздел}
+
+\section{Средства реализации}
+Алгоритмы для данной лабораторной работы были реализованы на языке C++, при использовании компилятора gcc версии 13.3.1, так как в стандартной библиотеке приведенного языка
+есть функция \texttt{clock\_gettime}, которая (при использовании макропеременной \texttt{CLOCK\_THREAD\_CPUTIME\_ID}) позволяет рассчитать процессорное время конкретного потока \cite{cpp-time}.
+
+\section{Реализация алгоритмов}
+Листинги исходных кодов программ  \ref{lst:lev_alg.cpp}--\ref{lst:dam_lev_alg.cpp} приведены в приложении.
+
+\section{Тестирование}
+Для написания модульных тестов использовалась библиотека $gtest$ \cite{gtests}. Данные тесты приведены в листинге \ref{lst:tests.cpp}.
+
+Тесты рассмотрены в таблице \ref{t:unit_tests}.
+
+\begin{table}[!ht]
+	\begin{center}
+		\small
+		\begin{threeparttable}
+			\caption{Модульные тесты}
+			\label{t:unit_tests}
+			\begin{tabular}{|c|c|c|c|c|c|}
+				\hline
+				\multicolumn{2}{|c|}{\bfseries Входные данные}
+				& \multicolumn{4}{c|}{\bfseries Расстояние и алгоритм} \\ 
+				\hline 
+				&
+				& \multicolumn{1}{c|}{\bfseries Дамерау---Левенштейна} 
+				& \multicolumn{3}{c|}{\bfseries Левенштейна} \\ \cline{3-6}
+				
+				\bfseries S1 & \bfseries S2 & \bfseries Линейный & \bfseries Линейный
+				
+				& \multicolumn{2}{c|}{\bfseries Рекурсивный} \\ \cline{5-6}
+				& & & & \bfseries Без кеша & \bfseries С кешем \\
+				\hline
+				hello & hello & 0 & 0 & 0 & 0 \\
+				\hline
+				meoww & hello & 4 & 4 & 4 & 4 \\
+				\hline
+				ppppp & hello & 5 & 5 & 5 & 5 \\
+				\hline
+				helol & hello & 1 & 2 & 2 & 2 \\
+				\hline
+			\end{tabular}	
+		\end{threeparttable}
+	\end{center}
+\end{table}
+
+Все тесты были успешно пройдены.
