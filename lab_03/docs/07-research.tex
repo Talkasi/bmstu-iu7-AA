@@ -1,7 +1,4 @@
 \chapter{Исследовательская часть}
-
-В данном разделе будут приведён пример работы программы, а также проведён сравнительный анализ алгоритмов на основе полученных данных.
-
 \section{Технические характеристики}
 
 Технические характеристики устройства, на котором выполнялись замеры времени, представлены далее.
@@ -9,17 +6,17 @@
 \begin{enumerate}
 	\item Процессор	AMD Ryzen 5 5500u ЦПУ 2592 МГц, ядер: 8, логических процессоров: 12.
 	\item Оперативная память: 16 ГБ.
-	\item Операционная система: Fedora 39~\cite{fedora}.
+	\item Операционная система: Fedora 39.
 \end{enumerate}
 
 При замерах времени ноутбук был включен в сеть электропитания. Запущены были только системные приложения.
 
 \section{Демонстрация работы программы}
 
-На рисунке \ref{img:working_example} представлена демонстрация работы разработанного приложения для алгоритмов поиска.
+На рисунке \ref{img:workExample} представлена демонстрация работы разработанного приложения для алгоритмов поиска.
 
 \includeimage
-{working_example}
+{workExample}
 {f}
 {H}
 {1\textwidth}
@@ -31,21 +28,21 @@
 
 \begin{figure}[H]
 	\centering
-	\includesvg[inkscapelatex=false, width=1\textwidth, height=1\textheight]{inc/img/DummySearch.svg}
+	\includesvg[inkscapelatex=false, width=1\textwidth, height=1\textheight]{inc/img/plotDummySearch.svg}
 	\caption{Зависимость количества сравнений от индекса искомого элемента в реализации алгоритма линейного поиска}
 	\label{plt:dummy_search}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
-	\includesvg[inkscapelatex=false, width=1\textwidth, height=1\textheight]{inc/img/BinSearch.svg}
+	\includesvg[inkscapelatex=false, width=1\textwidth, height=1\textheight]{inc/img/plotBinSearch.svg}
 	\caption{Зависимость количества сравнений от индекса искомого элемента в реализации алгоритма  бинарного поиска}
 	\label{plt:bin_search}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
-	\includesvg[inkscapelatex=false, width=1\textwidth, height=1\textheight]{inc/img/BinSearchSorted.svg}
+	\includesvg[inkscapelatex=false, width=1\textwidth, height=1\textheight]{inc/img/plotBinSearchSorted.svg}
 	\caption{Алгоритм бинарного поиска с сортировкой по возрастанию количества сравнения элементов}
 	\label{plt:bin_search_sorted}
 \end{figure}

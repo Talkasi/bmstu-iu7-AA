@@ -1,0 +1,17 @@
+*.lastbuildstate
+out/*
+data/*
+*.aux
+*.bbl
+*.blg
+*.toc
+*.gz
+*.bcf
+*svg-inkscape
+*.log
+*.run.xml
+*.out
+*.exe
+ready/*
+*.fdb_latexmk
+*.fls

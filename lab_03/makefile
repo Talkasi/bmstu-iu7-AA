@@ -30,6 +30,10 @@ app.exe: $(SRC_OBJS)
 $(OUT_DIR)/main.o: $(SRC_DIR)/main.cpp $(SRC_DIR)/tests.hpp $(SRC_DIR)/search.hpp
 	$(CC) $(CFLAGS) -c $< -o $@ $(SRC_LIBS)
 
+app-cli-debug: app.exe
+	mkdir -p ./ready
+	cp app.exe ready/app-cli-debug
+
 .PHONY: clean
 clean:
 	$(RM) $(OUT_DIR)/*
