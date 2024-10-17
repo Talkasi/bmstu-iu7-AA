@@ -1,0 +1,370 @@
+\chapter{Технологический раздел}
+\section{Средства реализации}
+Алгоритмы для данной лабораторной работы были реализованы на языке C++ при использовании компилятора gcc версии 13.3.1, так как в стандартной библиотеке приведённого языка присутствуют все необходимые структуры данных для реализации требуемых алгоритмов умножения матриц.
+
+\section{Реализация алгоритмов}
+Листинги исходного кода функций стандартного умножения матриц, а также стандартного и оптимизированного алгоритмов Винограда представлены в приложении~\ref{a:appendices}.
+
+\section{Тестирование}
+
+Модульные тесты рассмотрены в таблицах \ref{tests:standart}--\ref{tests:optWinograd}. Тестирование проводилось с помощью gtest, листинг исходного кода модульных тестов  приведён в приложении~\ref{a:appendices}.
+
+\begin{table}[ht]
+	\small
+	\begin{center}
+		\begin{threeparttable}
+			\caption{Модульные тесты стандартного алгоритма умножения матриц}
+			\label{tests:standart}
+			\begin{tabular}{|c|c|c|c|c|}
+				\hline
+				\multicolumn{2}{|c|}{\bfseries Входные данные}
+				& \multicolumn{2}{c|}{\bfseries Результат работы алгоритма} \\
+				\hline 
+				\bfseries Матрица 1
+				& \bfseries Матрица 2
+				& \bfseries Ожидаемый результат
+				& \bfseries Полученный результат \\
+				\hline
+				1 & 1 & 1 & 1 \\ 
+				\hline
+				$\begin{matrix}
+					1 & 0 & 0\\
+					0 & 1 & 0\\
+					0 & 0 & 1
+				\end{matrix}$ 
+				&  
+				$\begin{matrix}
+					1 & 2 & 3\\
+					4 & 5 & 6\\
+					7 & 8 & 9
+				\end{matrix}$ 
+				&
+				$\begin{matrix}
+					1 & 2 & 3\\
+					2 & 3 & 4\\
+					4 & 6 & 7
+				\end{matrix}$ 
+				&
+				$\begin{matrix}
+					1 & 2 & 3\\
+					2 & 3 & 4\\
+					4 & 6 & 7
+				\end{matrix}$  \\ 
+				\hline
+				$\begin{matrix}
+					1 & 2 & 3\\
+					4 & 5 & 6\\
+					7 & 8 & 9
+				\end{matrix}$ 
+				&
+				$\begin{matrix}
+					1 & 0 & 0\\
+					0 & 1 & 0\\
+					0 & 0 & 1
+				\end{matrix}$ 
+				&  
+				$\begin{matrix}
+					1 & 2 & 3\\
+					2 & 3 & 4\\
+					4 & 6 & 7
+				\end{matrix}$ 
+				&
+				$\begin{matrix}
+					1 & 2 & 3\\
+					2 & 3 & 4\\
+					4 & 6 & 7
+				\end{matrix}$  \\ 
+				\hline
+				$\begin{matrix}
+					1 & 2 & 3\\
+					4 & 5 & 6\\
+					7 & 8 & 9
+				\end{matrix}$ 
+				&  
+				$\begin{matrix}
+					1 & 2 & 3\\
+					4 & 5 & 6\\
+					7 & 8 & 9
+				\end{matrix}$ 
+				&
+				$\begin{matrix}
+					30 & 36 & 42\\
+					66 & 81 & 96\\
+					102 & 126 & 150
+				\end{matrix}$ 
+				&
+				$\begin{matrix}
+					30 & 36 & 42\\
+					66 & 81 & 96\\
+					102 & 126 & 150
+				\end{matrix}$ \\ 
+				\hline
+				$\begin{matrix}
+					1 & 2 & 3\\
+					2 & 3 & 4\\
+					4 & 6 & 7
+				\end{matrix}$ 
+				&  
+				$\begin{matrix}
+					1 & 2 \\
+					4 & 5 \\
+					7 & 8 
+				\end{matrix}$
+				&
+				$\begin{matrix}
+					30 & 36 \\
+					66 & 81 \\
+					102 & 126
+				\end{matrix}$
+				&
+				$\begin{matrix}
+					30 & 36 \\
+					66 & 81 \\
+					102 & 126
+				\end{matrix}$ \\ 
+				\hline
+			\end{tabular}
+		\end{threeparttable}
+	\end{center}
+\end{table}
+
+\newpage
+\begin{table}[ht]
+	\small
+	\begin{center}
+		\begin{threeparttable}
+			\caption{Модульные тесты алгоритма умножения матриц Винограда}
+			\label{tests:winograd}
+			\begin{tabular}{|c|c|c|c|c|}
+				\hline
+				\multicolumn{2}{|c|}{\bfseries Входные данные}
+				& \multicolumn{2}{c|}{\bfseries Результат работы алгоритма} \\
+				\hline 
+				\bfseries Матрица 1
+				& \bfseries Матрица 2
+				& \bfseries Ожидаемый результат
+				& \bfseries Полученный результат \\
+				\hline
+				1 & 1 & 1 & 1 \\ 
+				\hline
+				$\begin{matrix}
+					1 & 0 & 0\\
+					0 & 1 & 0\\
+					0 & 0 & 1
+				\end{matrix}$ 
+				&  
+				$\begin{matrix}
+					1 & 2 & 3\\
+					4 & 5 & 6\\
+					7 & 8 & 9
+				\end{matrix}$ 
+				&
+				$\begin{matrix}
+					1 & 2 & 3\\
+					2 & 3 & 4\\
+					4 & 6 & 7
+				\end{matrix}$ 
+				&
+				$\begin{matrix}
+					1 & 2 & 3\\
+					2 & 3 & 4\\
+					4 & 6 & 7
+				\end{matrix}$  \\ 
+				\hline
+				$\begin{matrix}
+					1 & 2 & 3\\
+					4 & 5 & 6\\
+					7 & 8 & 9
+				\end{matrix}$ 
+				&
+				$\begin{matrix}
+					1 & 0 & 0\\
+					0 & 1 & 0\\
+					0 & 0 & 1
+				\end{matrix}$ 
+				&  
+				$\begin{matrix}
+					1 & 2 & 3\\
+					2 & 3 & 4\\
+					4 & 6 & 7
+				\end{matrix}$ 
+				&
+				$\begin{matrix}
+					1 & 2 & 3\\
+					2 & 3 & 4\\
+					4 & 6 & 7
+				\end{matrix}$  \\ 
+				\hline
+				$\begin{matrix}
+					1 & 2 & 3\\
+					4 & 5 & 6\\
+					7 & 8 & 9
+				\end{matrix}$ 
+				&  
+				$\begin{matrix}
+					1 & 2 & 3\\
+					4 & 5 & 6\\
+					7 & 8 & 9
+				\end{matrix}$ 
+				&
+				$\begin{matrix}
+					30 & 36 & 42\\
+					66 & 81 & 96\\
+					102 & 126 & 150
+				\end{matrix}$ 
+				&
+				$\begin{matrix}
+					30 & 36 & 42\\
+					66 & 81 & 96\\
+					102 & 126 & 150
+				\end{matrix}$ \\ 
+				\hline
+				$\begin{matrix}
+					1 & 2 & 3\\
+					2 & 3 & 4\\
+					4 & 6 & 7
+				\end{matrix}$ 
+				&  
+				$\begin{matrix}
+					1 & 2 \\
+					4 & 5 \\
+					7 & 8 
+				\end{matrix}$
+				&
+				$\begin{matrix}
+					30 & 36 \\
+					66 & 81 \\
+					102 & 126
+				\end{matrix}$
+				&
+				$\begin{matrix}
+					30 & 36 \\
+					66 & 81 \\
+					102 & 126
+				\end{matrix}$ \\ 
+				\hline
+			\end{tabular}
+		\end{threeparttable}
+	\end{center}
+\end{table}
+
+\begin{table}[ht]
+	\small
+	\begin{center}
+		\begin{threeparttable}
+			\caption{Модульные тесты оптимизированного алгоритма умножения матриц Винограда}
+			\label{tests:optWinograd}
+			\begin{tabular}{|c|c|c|c|c|}
+				\hline
+				\multicolumn{2}{|c|}{\bfseries Входные данные}
+				& \multicolumn{2}{c|}{\bfseries Результат работы алгоритма} \\
+				\hline 
+				\bfseries Матрица 1
+				& \bfseries Матрица 2
+				& \bfseries Ожидаемый результат
+				& \bfseries Полученный результат \\
+				\hline
+				1 & 1 & 1 & 1 \\ 
+				\hline
+				$\begin{matrix}
+					1 & 0 & 0\\
+					0 & 1 & 0\\
+					0 & 0 & 1
+				\end{matrix}$ 
+				&  
+				$\begin{matrix}
+					1 & 2 & 3\\
+					4 & 5 & 6\\
+					7 & 8 & 9
+				\end{matrix}$ 
+				&
+				$\begin{matrix}
+					1 & 2 & 3\\
+					2 & 3 & 4\\
+					4 & 6 & 7
+				\end{matrix}$ 
+				&
+				$\begin{matrix}
+					1 & 2 & 3\\
+					2 & 3 & 4\\
+					4 & 6 & 7
+				\end{matrix}$  \\ 
+				\hline
+				$\begin{matrix}
+					1 & 2 & 3\\
+					4 & 5 & 6\\
+					7 & 8 & 9
+				\end{matrix}$ 
+				&
+				$\begin{matrix}
+					1 & 0 & 0\\
+					0 & 1 & 0\\
+					0 & 0 & 1
+				\end{matrix}$ 
+				&  
+				$\begin{matrix}
+					1 & 2 & 3\\
+					2 & 3 & 4\\
+					4 & 6 & 7
+				\end{matrix}$ 
+				&
+				$\begin{matrix}
+					1 & 2 & 3\\
+					2 & 3 & 4\\
+					4 & 6 & 7
+				\end{matrix}$  \\ 
+				\hline
+				$\begin{matrix}
+					1 & 2 & 3\\
+					4 & 5 & 6\\
+					7 & 8 & 9
+				\end{matrix}$ 
+				&  
+				$\begin{matrix}
+					1 & 2 & 3\\
+					4 & 5 & 6\\
+					7 & 8 & 9
+				\end{matrix}$ 
+				&
+				$\begin{matrix}
+					30 & 36 & 42\\
+					66 & 81 & 96\\
+					102 & 126 & 150
+				\end{matrix}$ 
+				&
+				$\begin{matrix}
+					30 & 36 & 42\\
+					66 & 81 & 96\\
+					102 & 126 & 150
+				\end{matrix}$ \\ 
+				\hline
+				$\begin{matrix}
+					1 & 2 & 3\\
+					2 & 3 & 4\\
+					4 & 6 & 7
+				\end{matrix}$ 
+				&  
+				$\begin{matrix}
+					1 & 2 \\
+					4 & 5 \\
+					7 & 8 
+				\end{matrix}$
+				&
+				$\begin{matrix}
+					30 & 36 \\
+					66 & 81 \\
+					102 & 126
+				\end{matrix}$
+				&
+				$\begin{matrix}
+					30 & 36 \\
+					66 & 81 \\
+					102 & 126
+				\end{matrix}$ \\ 
+				\hline
+			\end{tabular}
+		\end{threeparttable}
+	\end{center}
+\end{table}
+
+Все тесты были успешно пройдены.
