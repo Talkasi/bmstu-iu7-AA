@@ -2,7 +2,7 @@
 #include <iostream>
 #include <random>
 
-using matrix_t = std::vector<std::vector<int>>; 
+using matrix_t = std::vector<std::vector<int>>;
 
 matrix_t generateMatrix(int n_rows, int n_cols);
 matrix_t createMatrix(int n_rows, int n_cols);
