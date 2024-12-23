@@ -103,3 +103,4 @@ build/
 *.bbl-SAVE-ERROR
 */docs/svg-inkscape/*
 */report/svg-inkscape/*
+*.vscode
